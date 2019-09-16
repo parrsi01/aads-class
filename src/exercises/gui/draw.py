@@ -72,7 +72,6 @@ class squareCommand:
         return '<Command scale="'+ str(self.scale) + \
         '" width="'+ str(self.width) + '" color="' + self.color + '">Square</Command>'
 
-    pass
 class StarCommand:
     """Adding star drawing"""
     def __init__(self, scale=1, width=1, color="black"):

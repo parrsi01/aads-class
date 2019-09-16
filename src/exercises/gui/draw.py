@@ -48,6 +48,55 @@ class CircleCommand:
     def __str__(self):
         return f'<Command radius="{self.radius}" width="{str(self.width)}" color="{self.color}">Circle</Command>'
 
+class squareCommand:
+    """Adding Square drawing"""
+    def __init__(self, scale=1, width=1, color="black"):
+        self.scale = scale
+        self.width = width
+        self.color = color
+
+    def draw(self, turtle):
+        turtle.width(self.width)
+        turtle.pencolor(self.color)
+        for turn in range(4):
+            turtle.forward(self.scale*20)
+            turtle.left(90)
+        
+        penUp = PenUpCommand()
+        penDown = PenDownCommand()
+
+        penUp.draw(turtle)
+        penDown.draw(turtle)
+
+    def __str__(self):
+        return '<Command scale="'+ str(self.scale) + \
+        '" width="'+ str(self.width) + '" color="' + self.color + '">Square</Command>'
+
+    pass
+class StarCommand:
+    """Adding star drawing"""
+    def __init__(self, scale=1, width=1, color="black"):
+        self.scale = scale
+        self.width = width
+        self.color = color
+    
+    def draw(self, turtle):
+        turtle.width(self.width)
+        turtle.pencolor(self.color)
+        for turn in range(8):
+            turtle.left(45)  
+            turtle.forward(self.scale*20)
+            turtle.left(90)
+
+        penUp = PenUpCommand()
+        penDown = PenDownCommand()
+
+        penUp.draw(turtle)
+        penDown.draw(turtle)
+
+    def __str__(self):
+        return '<Command scale="'+ str(self.scale) + \
+        '" width="'+ str(self.width) + '" color="' + self.color + '">Star</Command>'
 
 class BeginFillCommand:
     def __init__(self, color):
@@ -189,6 +238,18 @@ class DrawingApplication(tkinter.Frame):
                     width = float(attr["width"].value)
                     color = attr["color"].value.strip()
                     cmd = CircleCommand(radius, width, color)
+
+                elif command == "Star":
+                    scale = float(attr["scale"].value)
+                    width = float(attr["width"].value)
+                    color = attr["color"].value.strip()
+                    cmd = StarCommand(scale,width,color)
+
+                elif command == "Square":
+                    scale = float(attr["scale"].value)
+                    width = float(attr["width"].value)
+                    color = attr["color"].value.strip()
+                    cmd = StarCommand(scale,width,color)
 
                 elif command == "BeginFill":
                     color = attr["color"].value.strip()
@@ -352,6 +413,30 @@ class DrawingApplication(tkinter.Frame):
             sideBar, text="Draw Circle", command=circleHandler
         )
         circleButton.pack(fill=tkinter.BOTH)
+
+        def starHandler():
+            """Function to handle star drawing"""
+            cmd = StarCommand(float(radiusSize.get()), float(widthSize.get()), penColor.get())
+            cmd.draw(theTurtle)
+            self.graphicsCommands.append(cmd)           
+            
+            screen.update()
+            screen.listen()
+        
+        starButton = tkinter.Button(sideBar, text = "Draw a Star", command=starHandler)
+        starButton.pack(fill=tkinter.BOTH)
+
+        def squareHandler():
+            """Function to handle square drawing"""
+            cmd = squareCommand(float(radiusSize.get()), float(widthSize.get()), penColor.get())
+            cmd.draw(theTurtle)
+            self.graphicsCommands.append(cmd)           
+            
+            screen.update()
+            screen.listen()
+        
+        squareButton = tkinter.Button(sideBar, text = "Draw a square", command=squareHandler)
+        squareButton.pack(fill=tkinter.BOTH)
 
         # The color mode 255 below allows colors to be specified in RGB form (i.e. Red/
         # Green/Blue). The mode allows the Red value to be set by a two digit hexadecimal

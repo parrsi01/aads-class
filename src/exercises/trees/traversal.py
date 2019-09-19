@@ -5,4 +5,10 @@
 
 def get_preorder(inorder: str, postorder: str) -> str:
     """Return pre-order traversal of a tree based on its in-order and post-order traversals"""
-    raise NotImplementedError
+    if inorder:
+        ind = inorder.index(postorder[0])
+        root = str(inorder[ind])
+        root.right = get_preorder(inorder[ind+1:], postorder)
+        root.left = get_preorder(inorder[:ind], postorder)
+        return root
+    #raise NotImplementedError

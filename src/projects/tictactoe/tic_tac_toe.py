@@ -56,8 +56,12 @@ class Board:
         This method should return true if the two boards, self and other,
         represent exactly the same state.
         """
+        if self.screen == other.screen:
+            return True
+        else:
+            return False
         # TODO: COMPLETE THIS FUNCTION
-        pass
+        #pass
 
     def __hash__(self):
         result = 0
@@ -118,6 +122,7 @@ class Board:
         """
         Return available (empty) cells
         """
+         
         pass
 
     def clone(self):
@@ -211,6 +216,8 @@ def minimax(player, board, depth=4):
     The base case results when, given the state of the board, someone has won or
     the board is full.
     """
+    
+    
     # TODO: COMPLETE THIS FUNCTION
     pass
 

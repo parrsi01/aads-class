@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Implement Minimax to play Tic Tac Toe"""
 
-
+import math
 import tkinter.messagebox
 import tkinter
 from turtle import RawTurtle, ScrolledCanvas
@@ -56,10 +56,14 @@ class Board:
         This method should return true if the two boards, self and other,
         represent exactly the same state.
         """
-        if self.screen == other.screen:
-            return True
-        else:
+        if other == None:
             return False
+
+        for i in range(3):
+            for j in range(3):
+                if self.data[(i,j)].eval() != other.data[(i,j)].eval():
+                    return False
+        return True
         # TODO: COMPLETE THIS FUNCTION
         #pass
 
@@ -92,6 +96,34 @@ class Board:
         state of the board. If the computer has won, return 1.
         If the human has won, return -1. Otherwise, return 0.
         """
+        #Will use sum of rows to calcuclate win for human/computer
+        for row in range(3):
+            row_sum = 0
+            for col in range(3):
+                row_sum+= self[(row,col)].eval()
+            if abs(row_sum) == 3:
+                return row_sum//3
+        for col in range(3):
+            col_sum = 0
+            for row in range(3):
+                col_sum += self[(row,col)].eval()
+            if abs(col_sum) == 3:
+                return col_sum//3
+
+        diagonalsum = 0
+
+        for i in range(3):
+            diagonalsum+=self[(i,i)].eval()
+        if abs(diagonalsum) == 3:
+            return diagonalsum//3
+        diagonalsum = 0
+        for i in range(3):
+            j = 2-i
+            diagonalsum+=self[(i,j)].eval()
+        if abs(diagonalsum) == 3:
+            return diagonalsum//3
+        return 0
+       
         # TODO: COMPLETE THIS FUNCTION
         pass
 
@@ -101,6 +133,12 @@ class Board:
         is completely filled up (no dummy turtles).
         Otherwise, it should return False.
         """
+        for row in range(3):
+            for col in range(3):
+                if self[(row,col)].eval() == 0:
+                    return False
+
+        return True
         # TODO: COMPLETE THIS FUNCTION
         pass
 
@@ -122,7 +160,6 @@ class Board:
         """
         Return available (empty) cells
         """
-         
         pass
 
     def clone(self):
@@ -216,7 +253,7 @@ def minimax(player, board, depth=4):
     The base case results when, given the state of the board, someone has won or
     the board is full.
     """
-    
+    infinity = float('inf')
     
     # TODO: COMPLETE THIS FUNCTION
     pass

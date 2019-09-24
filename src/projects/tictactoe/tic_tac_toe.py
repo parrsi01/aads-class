@@ -96,7 +96,7 @@ class Board:
         state of the board. If the computer has won, return 1.
         If the human has won, return -1. Otherwise, return 0.
         """
-        #Will use sum of rows to calcuclate win for human/computer
+        #Will use sum of rows/columns to calcuclate win for human/computer
         for row in range(3):
             row_sum = 0
             for col in range(3):
@@ -137,7 +137,6 @@ class Board:
             for col in range(3):
                 if self[(row,col)].eval() == 0:
                     return False
-
         return True
         # TODO: COMPLETE THIS FUNCTION
         pass
@@ -240,6 +239,29 @@ class O(RawTurtle):
     def eval(self):
         return HUMAN
 
+def game_over(state):
+    """
+    This function test if the human or computer wins
+    :param state: the state of the current board
+    :return: True if the human or computer wins
+    """
+    return eval(state, HUMAN) or eval(state, COMPUTER)
+
+
+def empty_cells(state):
+    """
+    Each empty cell will be added into cells' list
+    :param state: the state of the current board
+    :return: a list of empty cells
+    """
+    cells = []
+
+    for x, row in enumerate(state):
+        for y, cell in enumerate(row):
+            if cell == 0:
+                cells.append([x, y])
+
+    return cells
 
 def minimax(player, board, depth=4):
     """
@@ -254,6 +276,31 @@ def minimax(player, board, depth=4):
     the board is full.
     """
     infinity = float('inf')
+    if player == COMPUTER:
+        best = [-1, -1, -infinity]
+    else:
+        best = [-1, -1, +infinity]
+
+    if depth == 0 or game_over(board):
+        score = eval(board)
+        return [-1, -1, score]
+
+    for cell in empty_cells(board):
+        x, y = cell[0], cell[1]
+        board[x][y] = player
+        score = minimax(board, depth - 1, -player)
+        board[x][y] = 0
+        score[0], score[1] = x, y
+
+        if player == COMPUTER:
+            if score[2] > best[2]:
+                best = score  # max value
+        else:
+            if score[2] < best[2]:
+                best = score  # min value
+
+    return best
+
     
     # TODO: COMPLETE THIS FUNCTION
     pass
@@ -350,7 +397,7 @@ class TicTacToe(tkinter.Frame):
             """
             self.locked = True
             maxMove = None
-
+            minimax(COMPUTER,Board,depth=4)
             # Call Minimax to find the best move to make.
             # After writing this code, the maxMove tuple should
             # contain the best move for the computer. For instance,

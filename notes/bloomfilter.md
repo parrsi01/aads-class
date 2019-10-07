@@ -32,10 +32,13 @@ It is acceptable for an automated spell checker to miss a missspelled [sic] word
 ## Bloom filter properties
 
 * A fixed-size *bit vector*
+  * filter size $m$ is a function of the dictionary size $n$ and success probability $p$
+  * $m=-\frac{n\ln{p}}{(\ln{2})^2}$
 * $k$ hashing functions
   * if $k$ is low, too many false positives
   * if $k$ is high, the filter will become too slow
-  * optimal $k$ is $\frac{m}{n}\ln{2}$, where $m$ is size of the bit vector and $n$ is number of values
+  * optimal $k$ is a function of $m$ and $n$
+  * $k = \frac{m}{n}\ln{2}$
 
 ## Bloom filter implementation
 
@@ -50,12 +53,12 @@ from zlib import adler32
 class BlomFilter:
     def __init__(self, size: int = 11, k: int = 3):
         self._k = k
-        self._filter = [0] * size
+        self._filter = [False] * size
 ```
 
 ## Bloom filter example
 
-Use standard Python `hash` function, appending $0, 1, 2$ to the word for each hashing.
+The standard Python `hash` function is non-deterministic, hence the use of `adler32`. For this example we append $0, 1, 2$ to the word for each hashing.
 
 Small dictionary of three words: *cat*, *cow*, and *dog*.
 

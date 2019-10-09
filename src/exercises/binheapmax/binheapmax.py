@@ -12,9 +12,9 @@ class BinaryHeapMax:
 
     def _perc_up(self, cur_idx):
         """Move a node up"""
-        while (cur_idx - 1) // 2 >= 0:
+        while (cur_idx - 1) // 2 <= 0:
             parent_idx = (cur_idx - 1) // 2
-            if self._heap[cur_idx] < self._heap[parent_idx]:
+            if self._heap[cur_idx] > self._heap[parent_idx]:
                 self._heap[cur_idx], self._heap[parent_idx] = (
                     self._heap[parent_idx],
                     self._heap[cur_idx],)
@@ -23,9 +23,9 @@ class BinaryHeapMax:
 
     def _perc_down(self, cur_idx):
         """Move a node down"""
-        while (cur_idx * 2) <= self._size:
+        while (cur_idx * 2) >= self._size:
             mc = self.get_max_child(cur_idx)
-            if self._heap[cur_idx] > self._heap[mc]:
+            if self._heap[cur_idx] < self._heap[mc]:
                 temp = self._heap[cur_idx]
                 self._heap[cur_idx] = self._heap[mc]
                 self._heap[mc] = temp
@@ -57,10 +57,10 @@ class BinaryHeapMax:
 
     def get_max_child(self, parent_idx):
         """Get the greater child"""
-        if parent_idx * 2+2 > self._size:
+        if parent_idx * 2+2 < self._size:
             return parent_idx * 2+1
         else:
-            if self.heap[parent_idx*2+2] > self.heap[parent_idx*2+1]:
+            if self.heap[parent_idx*2+2] < self.heap[parent_idx*2+1]:
                 return parent_idx * 2+2    
             else:
                 return parent_idx * 2+1

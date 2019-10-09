@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Bloom filter implementation"""
 
-
 from zlib import crc32
 
 

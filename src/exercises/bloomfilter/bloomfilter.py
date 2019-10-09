@@ -33,8 +33,10 @@ class BloomFilter:
     def __len__(self):
         """Return size of the filter"""
         return len(self._filter)
+
 def main():
-        print(BloomFilter(250,7))
+    bf = BloomFilter(250,7)
+    print(bf)
 
 if __name__ == "__main__":
-    main()
+    main()g

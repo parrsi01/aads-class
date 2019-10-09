@@ -19,7 +19,8 @@ class BloomFilter:
 
     def add(self, word: str):
         """Add a dictionary word to the filter"""
-        raise NotImplementedError
+        return str(self._filter) + word
+        #raise NotImplementedError
 
     def __contains__(self, word: str) -> bool:
         """Check if a word in in the filter"""
@@ -33,3 +34,8 @@ class BloomFilter:
     def __len__(self):
         """Return size of the filter"""
         return len(self._filter)
+def main():
+        print(BloomFilter(250,7))
+
+if __name__ == "__main__":
+    main()

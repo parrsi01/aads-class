@@ -56,12 +56,8 @@ def knapsack(capacity: int, items: List[Item]) -> List[int]:
                     solution.append(items[all_items.value - 1])
                 # if the item was used, remove its weight
                     capacity -= all_items[all_items.value - 1].weight
-            return solution
+            return m[all_items.value, all_items.weight], solution
         
-
-            
-
-
 
 def pick_questions_to_answer(filename: str) -> Tuple[List[int], int]:
     """
@@ -70,9 +66,17 @@ def pick_questions_to_answer(filename: str) -> Tuple[List[int], int]:
     This function takes file name as an argument.
     The function returns a tuple of two items: the list of chosen indices and total point value of all selected questions.
     """
+    with open(filename) as file:
+        choices = file.readline().split()
+        pairs = [x.split() for x in file.readlines()]
+        total_val = [(int(pair[0]), int(pair[1])) for pair in pairs]
+
+    return str(choices), total_val
+
+
     
     #raise NotImplementedError
-    pass
+    #pass
 
 def main():
     """Entry point"""

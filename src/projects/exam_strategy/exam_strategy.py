@@ -26,30 +26,40 @@ def knapsack(capacity: int, items: List[Item]) -> List[int]:
     #all_items = []
 
     all_items = []
-    with open("data/projects/exam_strategy/questions{1}.in") as f:
-        for line in f.split('\n'):
-             items = items(line.split(' ')[0], items.split(' ')[1])
-             all_items.append(items)
-             print(all_items)
-   
+    for i in range(6):
+        with open("data/projects/exam_strategy/questions{i}.in") as f:
+            for line in f.split('\n'):
+                items = items(line.split(' ')[0], items.split(' ')[1])
+                all_items.append(items)
+                print(all_items)
+    solution = []
     n = len(all_items)
     if capacity == 0 or n == 0:
         return 0
     else:
         m = [[0] * capacity]
-        for i in range(all_items.weight):
-            m[0,all_items.weight] == 0
-            if all_items.weight[i] > all_items.weight:
-                m[all_items.value, all_items.weight] == m[all_items.value-1, all_items.weight]
-            else:
-                m[all_items.value, all_items.weight] = max(m[all_items.value-1,all_items.weight], 
-                m[all_items.value-1, all_items.weight - all_items.weight[i]] + all_items.value[i])
-        return m[all_items.value, all_items.weight]
+        m = [[0 for x in range(capacity+1)] for x in range(n+1)]
+        for i in enumerate(all_items):
 
-        for i in range(len(m)):
+            for i in range(all_items.weight):
+                m[0,all_items.weight] == 0
+                if all_items.weight[i] > all_items.weight:
+                    m[all_items.value, all_items.weight] == m[all_items.value-1, all_items.weight]
+                else:
+                    m[all_items.value, all_items.weight] = max(m[all_items.value-1,all_items.weight], 
+                    m[all_items.value-1, all_items.weight - all_items.weight[i]] + all_items.value[i])
+            return m[all_items.value, all_items.weight]
+
+            for i in range(len(all_items), 0, -1): # work backwards
+                # was this item used?
+                if m[all_items.value - 1][capacity] != m[i][capacity]:
+                    solution.append(items[all_items.value - 1])
+                # if the item was used, remove its weight
+                    capacity -= all_items[all_items.value - 1].weight
+            return solution
+        
+
             
-            pass
-
 
 
 
@@ -60,7 +70,7 @@ def pick_questions_to_answer(filename: str) -> Tuple[List[int], int]:
     This function takes file name as an argument.
     The function returns a tuple of two items: the list of chosen indices and total point value of all selected questions.
     """
-    return index,total
+    
     #raise NotImplementedError
     pass
 

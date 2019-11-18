@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Implement Minimax to play Tic Tac Toe"""
 
-import math
+
 import tkinter.messagebox
 import tkinter
 from turtle import RawTurtle, ScrolledCanvas
@@ -56,13 +56,21 @@ class Board:
         This method should return true if the two boards, self and other,
         represent exactly the same state.
         """
-        if other == None:
+        if not isinstance(other, Board):
             return False
+
+        if len(other.items) != 3:
+            return False
+
+        for item in other.items:
+            if len(item) != 3:
+                return False
 
         for i in range(3):
             for j in range(3):
-                if self.data[(i,j)].eval() != other.data[(i,j)].eval():
+                if self.items[i][j] != other.items[i][j]:
                     return False
+
         return True
         # TODO: COMPLETE THIS FUNCTION
         #pass
@@ -96,36 +104,34 @@ class Board:
         state of the board. If the computer has won, return 1.
         If the human has won, return -1. Otherwise, return 0.
         """
-        #Will use sum of rows/columns to calcuclate win for human/computer
-        for row in range(3):
+        for i in range(3):
             row_sum = 0
-            for col in range(3):
-                row_sum+= self[(row,col)].eval()
-            if abs(row_sum) == 3:
-                return row_sum//3
-        for col in range(3):
             col_sum = 0
-            for row in range(3):
-                col_sum += self[(row,col)].eval()
+            for j in range(3):
+                row_sum += self.items[i][j].eval()
+                col_sum += self.items[j][i].eval()
+
+            if abs(row_sum) == 3:
+                return row_sum // 3
+
             if abs(col_sum) == 3:
-                return col_sum//3
+                return col_sum // 3
 
-        diagonalsum = 0
+        diagonalsumL = 0
+        diagonalsumR = 0
+        for i in range(3):
+            diagonalsumL += self.items[i][i].eval()
+            diagonalsumR += self.items[i][2 - i].eval()
 
-        for i in range(3):
-            diagonalsum+=self[(i,i)].eval()
-        if abs(diagonalsum) == 3:
-            return diagonalsum//3
-        diagonalsum = 0
-        for i in range(3):
-            j = 2-i
-            diagonalsum+=self[(i,j)].eval()
-        if abs(diagonalsum) == 3:
-            return diagonalsum//3
+        if abs(diagonalsumL) == 3:
+            return diagonalsumL // 3
+
+        if abs(diagonalsumR) == 3:
+            return diagonalsumR // 3
+
         return 0
-       
         # TODO: COMPLETE THIS FUNCTION
-        pass
+        #pass
 
     def full(self):
         """
@@ -133,13 +139,15 @@ class Board:
         is completely filled up (no dummy turtles).
         Otherwise, it should return False.
         """
-        for row in range(3):
-            for col in range(3):
-                if self[(row,col)].eval() == 0:
+        for i in range(3):
+            for j in range(3):
+                if self.items[i][j].eval() == 0:
                     return False
+
         return True
+
         # TODO: COMPLETE THIS FUNCTION
-        pass
+        #pass
 
     def drawXOs(self):
         """
@@ -159,7 +167,8 @@ class Board:
         """
         Return available (empty) cells
         """
-        pass
+        return [(i, j)for j in range(3)for i in range(3)if isinstance(self.items[i][j], Dummy)]
+        #pass
 
     def clone(self):
         """
@@ -239,29 +248,6 @@ class O(RawTurtle):
     def eval(self):
         return HUMAN
 
-def game_over(state):
-    """
-    This function test if the human or computer wins
-    :param state: the state of the current board
-    :return: True if the human or computer wins
-    """
-    return eval(state, HUMAN) or eval(state, COMPUTER)
-
-
-def empty_cells(state):
-    """
-    Each empty cell will be added into cells' list
-    :param state: the state of the current board
-    :return: a list of empty cells
-    """
-    cells = []
-
-    for x, row in enumerate(state):
-        for y, cell in enumerate(row):
-            if cell == 0:
-                cells.append([x, y])
-
-    return cells
 
 def minimax(player, board, depth=4):
     """
@@ -275,35 +261,29 @@ def minimax(player, board, depth=4):
     The base case results when, given the state of the board, someone has won or
     the board is full.
     """
-    infinity = float('inf')
+    if board.eval():
+        return board.eval()
+
+    if board.is_full() or depth < 0:
+        return 0
+
     if player == COMPUTER:
-        best = [-1, -1, -infinity]
-    else:
-        best = [-1, -1, +infinity]
+        best_move = -1
+        for i, j in board.available():
+            temp = board.clone()
+            temp[i][j] = X(None)
+            best_move = max(best_move, minimax(HUMAN, temp, depth - 1))
+        return best_move
 
-    if depth == 0 or game_over(board):
-        score = eval(board)
-        return [-1, -1, score]
-
-    for cell in empty_cells(board):
-        x, y = cell[0], cell[1]
-        board[x][y] = player
-        score = minimax(board, depth - 1, -player)
-        board[x][y] = 0
-        score[0], score[1] = x, y
-
-        if player == COMPUTER:
-            if score[2] > best[2]:
-                best = score  # max value
-        else:
-            if score[2] < best[2]:
-                best = score  # min value
-
-    return best
-
-    
+    if player == HUMAN:
+        best_move = 1
+        for i, j in board.available():
+            temp = board.clone()
+            temp[i][j] = O(None)
+            best_move = min(best_move, minimax(COMPUTER, temp, depth - 1))
+        return best_move
     # TODO: COMPLETE THIS FUNCTION
-    pass
+    #pass
 
 
 class TicTacToe(tkinter.Frame):
@@ -397,14 +377,25 @@ class TicTacToe(tkinter.Frame):
             """
             self.locked = True
             maxMove = None
-            minimax(COMPUTER,Board,depth=4)
+
             # Call Minimax to find the best move to make.
             # After writing this code, the maxMove tuple should
             # contain the best move for the computer. For instance,
             # if the best move is in the first row and third column
             # then maxMove would be (0,2).
             # TODO: IMPLEMENT THE DESCRIBED LOGIC
+            depth = AILVLS[self.level]
+            best_move = -float("inf")
 
+            for i, j in board.available():
+                temp = board.clone()
+                temp.items[i][j] = X(None)
+                value = minimax(HUMAN, temp, depth)
+                if value > best_move:
+                    best_move = value
+                    row, col = i, j
+
+            maxMove = (row, col)
             row, col = maxMove
             board[row][col] = X(canvas)
             self.locked = False

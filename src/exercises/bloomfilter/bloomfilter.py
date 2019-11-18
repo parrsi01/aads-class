@@ -39,4 +39,4 @@ def main():
     print(bf)
 
 if __name__ == "__main__":
-    main()g
+    main()

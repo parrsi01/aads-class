@@ -30,6 +30,17 @@ class Node:
 
 
 def build_tree(text: str) -> tuple:
+    frequency = Counter(text)
+    for letter in frequency:
+        letter = Node()
+        q = heapq()
+        q.heappush(letter)
+        while len(q) > 2:
+            heapq.heappop()
+            heapq.heappop()
+    
+    
+
     """
     Construct a Huffman tree from the text using the following algorithm:
         1. Calculate frequency of each letter in the text and store the result in a frequency table
@@ -47,10 +58,18 @@ def build_tree(text: str) -> tuple:
 
 def traverse_tree(root: Node) -> str:
     """Traverse a tree pre-order and return the result"""
+
     raise NotImplementedError
 
 
 def mark_nodes(d1: dict, d2: dict, root: Node, path: str) -> Union[None, tuple]:
+    if root is None:
+        return
+    else:
+        d1 = 1
+        d2 = 2
+        return
+
     """
     Generate code for each letter in the text using the following algorithm:
         1. If the root is empty, return

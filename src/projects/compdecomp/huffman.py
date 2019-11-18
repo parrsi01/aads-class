@@ -31,16 +31,29 @@ class Node:
 
 def build_tree(text: str) -> tuple:
     frequency = Counter(text)
-    for letter in frequency:
-        letter = Node()
-        q = heapq()
-        q.heappush(letter)
-        while len(q) > 2:
-            heapq.heappop()
-            heapq.heappop()
-    
-    
+    for character in frequency:
+        if not character in frequency:
+            frequency[character] = 0
+        else:
+            frequency[character] += 1   
+    q = heapq()    
+    for key in frequency:
+        node = q(key, frequency[key])
+        q.heappush(heapq, node)
+    while(len(heapq)>1):
+			node1 = q.heappop(heapq)
+			node2 = q.heappop(heapq)
 
+			merged = q(None, node1.freq + node2.freq)
+			merged.left = node1
+			merged.right = node2
+
+			q.heappush(heapq, merged)
+    q.heappop()
+
+    return q(key[0],frequency)
+    
+    
     """
     Construct a Huffman tree from the text using the following algorithm:
         1. Calculate frequency of each letter in the text and store the result in a frequency table
@@ -53,7 +66,7 @@ def build_tree(text: str) -> tuple:
         4. Remove the only remaining node from the heap. This is the root of the Huffman tree
         5. Return the (root, frequency table) tuple
     """
-    raise NotImplementedError
+    #raise NotImplementedError
 
 
 def traverse_tree(root: Node) -> str:
@@ -66,9 +79,12 @@ def mark_nodes(d1: dict, d2: dict, root: Node, path: str) -> Union[None, tuple]:
     if root is None:
         return
     else:
-        d1 = 1
-        d2 = 2
+        d1 += root[path] 
+        d2 += path[root]
         return
+    
+
+    return (d1, d2)
 
     """
     Generate code for each letter in the text using the following algorithm:
@@ -87,7 +103,7 @@ def mark_nodes(d1: dict, d2: dict, root: Node, path: str) -> Union[None, tuple]:
 def print_codes(d: dict, weights: dict) -> None:
     """Print letters of the text and their codes. The output is ordered by the letter weight."""
     print(f"{'Letter':10s}{'Weight':^10s}{'Code':^10s}{'Length':^5s}")
-    raise NotImplementedError
+    #raise NotImplementedError
 
 
 def main():

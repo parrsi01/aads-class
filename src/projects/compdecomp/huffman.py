@@ -72,8 +72,16 @@ def build_tree(text: str) -> tuple:
 
 def traverse_tree(root: Node) -> str:
     """Traverse a tree pre-order and return the result"""
-
-    raise NotImplementedError
+    if root != None:
+        if Node.left:
+            print(Node.value)
+            traverse_tree(Node.value)
+            
+        else:
+            if Node.right:
+                print(Node.value)
+                traverse_tree(Node.value)
+    #raise NotImplementedError
 
 
 def mark_nodes(d1: dict, d2: dict, root: Node, path: str) -> Union[None, tuple]:
@@ -85,7 +93,7 @@ def mark_nodes(d1: dict, d2: dict, root: Node, path: str) -> Union[None, tuple]:
         d2 = path + Node.value
         mark_nodes(root.left, d1 + "0")
         mark_nodes(root.right, d2 + "1")
-        Union = (d1, d2)
+        Union = [d1, d2]
     return Union
 
     """

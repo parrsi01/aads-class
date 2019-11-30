@@ -76,15 +76,16 @@ def traverse_tree(root: Node) -> str:
 
 
 def mark_nodes(d1: dict, d2: dict, root: Node, path: str) -> Union[None, tuple]:
+    
     if root is None:
         return
     else:
-        d1 += root[path] 
-        d2 += path[root]
-        return
-    
-
-    return (d1, d2)
+        d1 = Node.value + path
+        d2 = path + Node.value
+        mark_nodes(root.left, d1 + "0")
+        mark_nodes(root.right, d2 + "1")
+        Union = (d1, d2)
+    return Union
 
     """
     Generate code for each letter in the text using the following algorithm:
@@ -97,7 +98,7 @@ def mark_nodes(d1: dict, d2: dict, root: Node, path: str) -> Union[None, tuple]:
         4. Recursively mark nodes in the right subtree (add 1 to the path)
         5. Return (d1, d2) tuple
     """
-    raise NotImplementedError
+    #raise NotImplementedError
 
 
 def print_codes(d: dict, weights: dict) -> None:

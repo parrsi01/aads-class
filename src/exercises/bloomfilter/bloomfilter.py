@@ -9,6 +9,7 @@ class BloomFilter:
         """Initialize the filter"""
         self._k = k
         self._filter = [False] * size
+        
         #raise NotImplementedError
 
     def _hash(self, word: str) -> tuple:

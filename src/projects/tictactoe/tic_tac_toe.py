@@ -56,6 +56,8 @@ class Board:
         This method should return true if the two boards, self and other,
         represent exactly the same state.
         """
+        # TODO: COMPLETE THIS FUNCTION
+        #pass
         if not isinstance(other, Board):
             return False
 
@@ -72,8 +74,6 @@ class Board:
                     return False
 
         return True
-        # TODO: COMPLETE THIS FUNCTION
-        #pass
 
     def __hash__(self):
         result = 0
@@ -90,7 +90,7 @@ class Board:
         a new game.
         """
 
-        # self.screen.tracer(1)
+        self.screen.tracer(1)
         for i in range(3):
             for j in range(3):
                 self.items[i][j].goto(-100, -100)
@@ -104,6 +104,8 @@ class Board:
         state of the board. If the computer has won, return 1.
         If the human has won, return -1. Otherwise, return 0.
         """
+        # TODO: COMPLETE THIS FUNCTION
+        #pass
         for i in range(3):
             row_sum = 0
             col_sum = 0
@@ -130,8 +132,6 @@ class Board:
             return diagonalsumR // 3
 
         return 0
-        # TODO: COMPLETE THIS FUNCTION
-        #pass
 
     def full(self):
         """
@@ -139,15 +139,14 @@ class Board:
         is completely filled up (no dummy turtles).
         Otherwise, it should return False.
         """
+        # TODO: COMPLETE THIS FUNCTION
+        #pass
         for i in range(3):
             for j in range(3):
                 if self.items[i][j].eval() == 0:
                     return False
 
         return True
-
-        # TODO: COMPLETE THIS FUNCTION
-        #pass
 
     def drawXOs(self):
         """
@@ -167,8 +166,8 @@ class Board:
         """
         Return available (empty) cells
         """
-        return [(i, j)for j in range(3)for i in range(3)if isinstance(self.items[i][j], Dummy)]
         #pass
+        return [(i, j) for j in range(3) for i in range(3) if isinstance(self.items[i][j], Dummy)]
 
     def clone(self):
         """
@@ -248,7 +247,7 @@ class O(RawTurtle):
     def eval(self):
         return HUMAN
 
-
+@lru_cache(maxsize=4)
 def minimax(player, board, depth=4):
     """
     The minimax function is given a player (1 = Computer, -1 = Human) and a
@@ -284,6 +283,7 @@ def minimax(player, board, depth=4):
         return best_move
     # TODO: COMPLETE THIS FUNCTION
     #pass
+
 
 
 class TicTacToe(tkinter.Frame):
@@ -395,8 +395,8 @@ class TicTacToe(tkinter.Frame):
                     best_move = value
                     row, col = i, j
 
-            max_move = (row, col)
-            row, col = max_move
+            maxMove = (row, col)
+            row, col = maxMove
             board[row][col] = X(canvas)
             self.locked = False
 

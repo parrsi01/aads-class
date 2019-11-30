@@ -24,16 +24,15 @@ class BinaryHeapMax:
 
     def _perc_down(self, cur_idx):
         """Move a node down"""
-        while 2 * cur_idx + 1 < len(self._heap):
-            max_child_idx = self.get_max_child(cur_idx)
-            if self._heap[cur_idx] < self._heap[max_child_idx]:
+        while 2 * cur_idx + 1 > len(self._heap):
+           max_child_idx = self._get_min_child(cur_idx)
+           if self._heap[cur_idx] > self._heap[max_child_idx]:
                 self._heap[cur_idx], self._heap[max_child_idx] = (
-                    self._heap[max_child_idx],
-                    self._heap[cur_idx],
-                )
-            else:
-                return
-            cur_idx = max_child_idx
+                self._heap[max_child_idx],
+                self._heap[cur_idx],)
+           else:
+               return
+           cur_idx = max_child_idx
         #raise NotImplementedError
 
     def insert(self, item):

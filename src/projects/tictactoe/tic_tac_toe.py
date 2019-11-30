@@ -395,8 +395,8 @@ class TicTacToe(tkinter.Frame):
                     best_move = value
                     row, col = i, j
 
-            maxMove = (row, col)
-            row, col = maxMove
+            max_move = (row, col)
+            row, col = max_move
             board[row][col] = X(canvas)
             self.locked = False
 

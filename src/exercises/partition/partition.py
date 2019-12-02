@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Implementation of the Partition data structure"""
 
 from xml.dom import minidom
@@ -25,6 +25,8 @@ class Partition:
         Find the root of the destination vertex tree
         If they are different, set root of the destination vertex tree to the root of the source vertex tree
         """
+        self._forest = self.forest + e
+       
         raise NotImplementedError
 
     def _find_root(self, node: int) -> int:
@@ -57,8 +59,12 @@ def read_xml(filename: str) -> tuple:
     xml_edges = xml_graph.getElementsByTagName("Edges")[0].getElementsByTagName("Edge")
 
     # TODO: Add all vertices from the XML file to the dictionary of vertices
+    for i in xml_vertices:
+        vertices[i] = xml_vertices
 
     # TODO: Add all edges from the XML file to the list of edges
+    for i in xml_edges:
+        edges.append(xml_edges)
 
     return vertices, edges
 
@@ -66,6 +72,7 @@ def read_xml(filename: str) -> tuple:
 def main():
     """Main function"""
     vertices, edges = read_xml("data/exercises/partition/neia.xml")
+    #print(edges)
     partition = Partition(len(vertices))
     print(", ".join([f"{x:2}" for x in range(len(vertices))]))
     for edge in sorted(edges, key=lambda e: e.weight):

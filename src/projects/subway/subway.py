@@ -12,8 +12,7 @@ def read_file(filename: str) -> Tuple[Graph, str, str]:
 
     Return the graph object and two vertices: start and destination
     """
-    data = open(filename, 'r')
-    stations = []
+    
     raise NotImplementedError
 
 

@@ -19,6 +19,7 @@ class BloomFilter:
 
     def add(self, word: str):
         """Add a dictionary word to the filter"""
+        
         return str(self._filter) + word
         #raise NotImplementedError
 

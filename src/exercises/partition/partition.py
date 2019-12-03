@@ -25,7 +25,10 @@ class Partition:
         Find the root of the destination vertex tree
         If they are different, set root of the destination vertex tree to the root of the source vertex tree
         """
-        self._forest = self.forest + e
+        self._forest.append(e)
+
+        # Source vertex tuple Vertex = namedtuple("Vertex", ["id", "x", "y", "key"])
+
        
         raise NotImplementedError
 
@@ -35,6 +38,9 @@ class Partition:
 
         The root of a tree is a node that has its value matching the index in the forest
         """
+        
+         
+
         raise NotImplementedError
 
     def __str__(self) -> str:
@@ -72,7 +78,7 @@ def read_xml(filename: str) -> tuple:
 def main():
     """Main function"""
     vertices, edges = read_xml("data/exercises/partition/neia.xml")
-    #print(edges)
+    #print(len(vertices))
     partition = Partition(len(vertices))
     print(", ".join([f"{x:2}" for x in range(len(vertices))]))
     for edge in sorted(edges, key=lambda e: e.weight):

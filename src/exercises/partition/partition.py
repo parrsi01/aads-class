@@ -25,23 +25,26 @@ class Partition:
         Find the root of the destination vertex tree
         If they are different, set root of the destination vertex tree to the root of the source vertex tree
         """
-        self._forest.append(e)
+        src = e.src
+        dst = e.dst
 
-        # Source vertex tuple Vertex = namedtuple("Vertex", ["id", "x", "y", "key"])
+        root_src = self._find_root(src)
+        root_dst = self._find_root(dst)
 
-       
-        raise NotImplementedError
+        if root_dst != root_src:
+            self._forest[root_dst] = root_src
+        #raise NotImplementedError
 
     def _find_root(self, node: int) -> int:
         """
-        Find root of a node
+        Find root of tree that this node belongs to.
 
         The root of a tree is a node that has its value matching the index in the forest
         """
-        
-         
-
-        raise NotImplementedError
+        while node != self._forest[node]:
+            node = self._forest[node]
+        return node
+        #raise NotImplementedError
 
     def __str__(self) -> str:
         """Stringify the forest"""
@@ -59,26 +62,35 @@ def read_xml(filename: str) -> tuple:
 
     xml_doc = minidom.parse(filename)
     xml_graph = xml_doc.getElementsByTagName("Graph")[0]
-    xml_vertices = xml_graph.getElementsByTagName("Vertices")[0].getElementsByTagName(
-        "Vertex"
-    )
+    xml_vertices = xml_graph.getElementsByTagName("Vertices")[0].getElementsByTagName("Vertex")
     xml_edges = xml_graph.getElementsByTagName("Edges")[0].getElementsByTagName("Edge")
 
     # TODO: Add all vertices from the XML file to the dictionary of vertices
     for i in xml_vertices:
-        vertices[i] = xml_vertices
+        id = i.getAttribute("id")
+        x = i.getAttribute("x")
+        y = i.getAttribute("y")
+        key = i.getAttribute("label")
+        vertices[id] = Vertex(id,float(x),float(y),key)
+        #vertices = Vertex(id,float(x),float(y),key)
+
 
     # TODO: Add all edges from the XML file to the list of edges
     for i in xml_edges:
-        edges.append(xml_edges)
+        src = i.getAttribute("source")
+        dst = i.getAttribute("destination")
+        weight = i.getAttribute("weight")
+        edges.append(Edge(int(src),int(dst),float(weight)))
 
     return vertices, edges
 
 
 def main():
     """Main function"""
+    
     vertices, edges = read_xml("data/exercises/partition/neia.xml")
-    #print(len(vertices))
+    # f = Partition(10)
+    # print(type(f.forest))
     partition = Partition(len(vertices))
     print(", ".join([f"{x:2}" for x in range(len(vertices))]))
     for edge in sorted(edges, key=lambda e: e.weight):

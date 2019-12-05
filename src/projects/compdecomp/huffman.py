@@ -41,17 +41,15 @@ def build_tree(text: str) -> tuple:
         node = q(key, frequency[key])
         q.heappush(heapq, node)
     while(len(heapq)>1):
+        node1 = q.heappop(heapq)
+        node2 = q.heappop(heapq)
         
-		node1 = q.heappop(heapq)
-		node2 = q.heappop(heapq)
-
-		merged = q(None, node1.freq + node2.freq)
-		merged.left = node1
-		merged.right = node2
-
-		q.heappush(heapq, merged)
+        merged = q(None, node1.freq + node2.freq)
+        merged.left = node1
+        merged.right = node2
+        q.heappush(heapq, merged)
     q.heappop()
-
+    
     return q(key[0],frequency)
     
     

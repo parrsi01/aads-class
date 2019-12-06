@@ -21,7 +21,14 @@ def read_file(filename: str) -> Dict[str, str]:
 
     Return the {person: class} mapping
     """
-    raise NotImplementedError
+    person = {}
+    f = open(filename)
+    #value represents the class of the person.
+    for line in f:
+        (name, value) = line.strip().split(':')
+        person[name] = value
+    return person
+    #raise NotImplementedError
 
 
 
